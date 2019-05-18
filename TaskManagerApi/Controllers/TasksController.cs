@@ -30,24 +30,17 @@ namespace TaskManagerApi.Controllers
             return Ok(tasks);
         }
         
-        /// <summary>
-        /// Creates a new task.
-        /// </summary>
-        /// <param name="task"></param>
         [HttpPost]
-        public IActionResult Post([FromBody] Model.Task task)
+        public async Task<IActionResult> PostTodo([FromBody] Model.Task task)
         {
-            if (task == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Task is null.");
+                return BadRequest(ModelState);
             }
 
-            this.taskRepository.Create(task);
+            await this.taskRepository.Create(task);
 
-            return CreatedAtRoute(
-                  "Get",
-                  new { Id = task.Id },
-                  task);
+            return CreatedAtAction("POST ", new { id = task.Id }, task);
         }
 
         /// <summary>

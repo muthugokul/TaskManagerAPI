@@ -12,9 +12,7 @@ namespace TaskManagerApi.Model
         /// <summary>
         /// Unique id of parent task.
         /// </summary>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Name of parent task.

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TaskManagerApi.Data.Interface;
 using TaskManagerApi.Model;
 
 namespace TaskManagerApi.Data
 {
-    public class TaskRepository : ITaskRepository<Task>
+    public class TaskRepository : ITaskRepository<Model.Task>
     {
         readonly TaskManagerDbContext DbContext;
 
@@ -16,24 +17,24 @@ namespace TaskManagerApi.Data
             DbContext = context;
         }
 
-        public IEnumerable<Task> GetAll()
+        public IEnumerable<Model.Task> GetAll()
         {
             return DbContext.Tasks.ToList();
         }
 
-        public Task Get(int id)
+        public Model.Task Get(int id)
         {
             return DbContext.Tasks
                   .FirstOrDefault(e => e.Id == id);
         }
 
-        public void Create(Task entity)
+        public async Task<int> Create(Model.Task entity)
         {
             DbContext.Tasks.Add(entity);
-            DbContext.SaveChanges();
+            return await DbContext.SaveChangesAsync();
         }
 
-        public void Update(Task task, Task entity)
+        public void Update(Model.Task task, Model.Task entity)
         {
             task.Id = entity.Id;
             task.Name = entity.Name;
@@ -42,7 +43,7 @@ namespace TaskManagerApi.Data
             DbContext.SaveChanges();
         }
 
-        public void End(Task task)
+        public void End(Model.Task task)
         {
             task.IsComplete = true;
             DbContext.SaveChanges();

@@ -8,7 +8,7 @@ namespace TaskManagerApi.Data
 {
     public class TaskManagerDbContext : DbContext
     {
-        public TaskManagerDbContext(DbContextOptions options)
+        public TaskManagerDbContext(DbContextOptions<TaskManagerDbContext> options)
             : base(options)
         {
         }
