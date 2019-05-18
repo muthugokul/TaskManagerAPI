@@ -2,7 +2,7 @@
 
 namespace TaskManagerApi.Business
 {
-    public class Class1
+    public class TaskService
     {
     }
 }

@@ -3,31 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TaskManagerApi.Data.Interface;
 
 namespace TaskManagerApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class TasksController : ControllerBase
     {
+        private readonly ITaskRepository<Model.Task> taskRepository;
+
+        public TasksController(ITaskRepository<Model.Task> taskRepository)
+        {
+            this.taskRepository = taskRepository;
+        }
+
         /// <summary>
         /// Retrieves all tasks.
         /// </summary>
         /// <returns></returns>
-        // GET api/values
+        // GET api/tasks
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            IEnumerable<Model.Task> tasks = this.taskRepository.GetAll();
+            return Ok(tasks);
         }
         
         /// <summary>
         /// Creates a new task.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="task"></param>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Model.Task task)
         {
+            if (task == null)
+            {
+                return BadRequest("Task is null.");
+            }
+
+            this.taskRepository.Create(task);
+
+            return CreatedAtRoute(
+                  "Get",
+                  new { Id = task.Id },
+                  task);
         }
 
         /// <summary>

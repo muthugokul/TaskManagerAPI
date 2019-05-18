@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskManagerApi.Model
 {
@@ -10,7 +12,9 @@ namespace TaskManagerApi.Model
         /// <summary>
         /// Unique id of task.
         /// </summary>
-        public Guid Id{ get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         /// <summary>
         /// Name of the task.
@@ -20,7 +24,7 @@ namespace TaskManagerApi.Model
         /// <summary>
         /// Priority of task.
         /// </summary>
-        public int priority { get; set; }
+        public int Priority { get; set; }
 
         /// <summary>
         /// Parent task of task.
@@ -36,5 +40,7 @@ namespace TaskManagerApi.Model
         /// End date of the task.
         /// </summary>
         public DateTime? EndDate { get; set; }
+
+        public bool IsComplete{ get; set; }
     }
 }
