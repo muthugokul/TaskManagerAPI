@@ -10,7 +10,7 @@ namespace TaskManagerApi.Data.Interface
         Task<IEnumerable<TEntity>> GetAll();
         Task<TEntity> Get(int id);
         Task<int> Create(TEntity entity);
-        void Update(TEntity dbEntity, TEntity entity);
-        void EndTask(TEntity entity);
+        Task<int> Update(TEntity entity);
+        Task<int> EndTask(int id);
     }
 }

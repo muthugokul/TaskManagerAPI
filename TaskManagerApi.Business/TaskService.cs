@@ -8,21 +8,30 @@ namespace TaskManagerApi.Business
 {
     public class TaskService : IService<Model.Task>
     {
-        private IRepository<Model.Task> taskRepository;
+        private readonly IRepository<Model.Task> taskRepository;
+        private readonly IRepository<Model.ParentTask> parentTaskRepository;
 
-        public TaskService(IRepository<Model.Task> taskRepository)
+        public TaskService(IRepository<Model.Task> taskRepository, IRepository<Model.ParentTask> parentTaskRepository)
         {
             this.taskRepository = taskRepository;
+            this.parentTaskRepository = parentTaskRepository;
         }
 
-        public Task<int> Create(Model.Task entity)
+        public async Task<int> Create(Model.Task entity)
         {
-            throw new NotImplementedException();
+            var parentTask = entity.ParentTask;
+            if (parentTask != null && parentTask.Id > 0)
+            {
+                parentTask = await this.parentTaskRepository.Get(entity.ParentTask.Id);
+                entity.ParentTask = parentTask;
+            }
+
+            return await this.taskRepository.Create(entity);
         }
 
-        public void EndTask(Model.Task entity)
+        public async Task<int> EndTask(int id)
         {
-            throw new NotImplementedException();
+            return await this.taskRepository.EndTask(id);
         }
 
         public async Task<Model.Task> Get(int id)
@@ -35,9 +44,16 @@ namespace TaskManagerApi.Business
             return await this.taskRepository.GetAll();
         }
 
-        public void Update(Model.Task dbEntity, Model.Task entity)
+        public async Task<int> Update(Model.Task entity)
         {
-            throw new NotImplementedException();
+            var parentTask = entity.ParentTask;
+            if (parentTask != null && parentTask.Id > 0)
+            {
+                parentTask = await this.parentTaskRepository.Get(entity.ParentTask.Id);
+                entity.ParentTask = parentTask;
+            }
+
+            return await this.taskRepository.Update(entity);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace TaskManagerApi.Business
 {
     public class ParentTaskService : IService<ParentTask>
     {
-        private IRepository<Model.ParentTask> parentTaskRepository;
+        private readonly IRepository<Model.ParentTask> parentTaskRepository;
 
         public ParentTaskService(IRepository<Model.ParentTask> parentTaskRepository)
         {
@@ -21,7 +21,7 @@ namespace TaskManagerApi.Business
             throw new NotImplementedException();
         }
 
-        public void EndTask(ParentTask entity)
+        public Task<int> EndTask(int id)
         {
             throw new NotImplementedException();
         }
@@ -36,7 +36,7 @@ namespace TaskManagerApi.Business
             return await this.parentTaskRepository.GetAll();
         }
 
-        public void Update(ParentTask dbEntity, ParentTask entity)
+        public Task<int> Update(ParentTask entity)
         {
             throw new NotImplementedException();
         }

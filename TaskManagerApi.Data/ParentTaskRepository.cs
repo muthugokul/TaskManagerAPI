@@ -22,14 +22,14 @@ namespace TaskManagerApi.Data
             throw new NotImplementedException();
         }
 
-        public void EndTask(ParentTask entity)
+        public Task<int> EndTask(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ParentTask> Get(int id)
+        public async Task<ParentTask> Get(int id)
         {
-            throw new NotImplementedException();
+            return await this.dbContext.ParentTasks.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<IEnumerable<Model.ParentTask>> GetAll()
@@ -37,7 +37,7 @@ namespace TaskManagerApi.Data
             return await this.dbContext.ParentTasks.ToListAsync();
         }
 
-        public void Update(ParentTask dbEntity, ParentTask entity)
+        public Task<int> Update(ParentTask entity)
         {
             throw new NotImplementedException();
         }

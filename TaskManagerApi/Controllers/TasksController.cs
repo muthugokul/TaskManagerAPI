@@ -34,9 +34,8 @@ namespace TaskManagerApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                throw;
             }
-
         }
 
         /// <summary>
@@ -54,18 +53,23 @@ namespace TaskManagerApi.Controllers
 
             try
             {
-                var tasks = await this.taskService.Get(id);
-                return Ok(tasks);
+                var task = await this.taskService.Get(id);
+
+                if (task == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(task);
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                throw;
             }
-
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostTodo([FromBody] Model.Task task)
+        public async Task<IActionResult> Create([FromBody] Model.Task task)
         {
             if (!ModelState.IsValid)
             {
@@ -76,34 +80,60 @@ namespace TaskManagerApi.Controllers
             {
                 await this.taskService.Create(task);
 
-                return CreatedAtAction("POST ", new { id = task.Id }, task);
+                return Ok();
             }
             catch(Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                throw;
             }
-
-            
         }
 
         /// <summary>
         /// Updates the task.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="value"></param>
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        /// <param name="task">The task</param>
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] Model.Task task)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await this.taskService.Update(task);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         /// <summary>
         /// Updates the task for the specified fields.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="value"></param>
-        [HttpPatch("{id}")]
-        public void Patch(int id, [FromBody] string value)
+        [HttpPut("{id}/end")]
+        public async Task<IActionResult> EndTask(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await this.taskService.EndTask(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

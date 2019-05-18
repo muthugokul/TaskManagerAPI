@@ -34,19 +34,18 @@ namespace TaskManagerApi.Data
             return await this.dbContext.SaveChangesAsync();
         }
 
-        public void Update(Model.Task task, Model.Task entity)
+        public async Task<int> Update(Model.Task task)
         {
-            task.Id = entity.Id;
-            task.Name = entity.Name;
-            task.Priority = entity.Priority;
-
-            this.dbContext.SaveChanges();
+            this.dbContext.Update(task);
+            return await this.dbContext.SaveChangesAsync();
         }
 
-        public void EndTask(Model.Task task)
+        public async Task<int> EndTask(int id)
         {
+            var task = await this.Get(id);
             task.IsComplete = true;
-            this.dbContext.SaveChanges();
+
+            return await this.dbContext.SaveChangesAsync();
         }
     }
 }
