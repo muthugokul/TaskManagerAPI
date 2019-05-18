@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,30 +9,29 @@ using TaskManagerApi.Model;
 
 namespace TaskManagerApi.Data
 {
-    public class TaskRepository : ITaskRepository<Model.Task>
+    public class TaskRepository : IRepository<Model.Task>
     {
-        readonly TaskManagerDbContext DbContext;
+        private readonly TaskManagerDbContext dbContext;
 
         public TaskRepository(TaskManagerDbContext context)
         {
-            DbContext = context;
+            this.dbContext = context;
         }
 
-        public IEnumerable<Model.Task> GetAll()
+        public async Task<IEnumerable<Model.Task>> GetAll()
         {
-            return DbContext.Tasks.ToList();
+            return await this.dbContext.Tasks.Include(p => p.ParentTask).ToListAsync();
         }
 
-        public Model.Task Get(int id)
+        public async Task<Model.Task> Get(int id)
         {
-            return DbContext.Tasks
-                  .FirstOrDefault(e => e.Id == id);
+            return await this.dbContext.Tasks.Include(p => p.ParentTask).FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<int> Create(Model.Task entity)
         {
-            DbContext.Tasks.Add(entity);
-            return await DbContext.SaveChangesAsync();
+            this.dbContext.Tasks.Add(entity);
+            return await this.dbContext.SaveChangesAsync();
         }
 
         public void Update(Model.Task task, Model.Task entity)
@@ -40,13 +40,13 @@ namespace TaskManagerApi.Data
             task.Name = entity.Name;
             task.Priority = entity.Priority;
 
-            DbContext.SaveChanges();
+            this.dbContext.SaveChanges();
         }
 
-        public void End(Model.Task task)
+        public void EndTask(Model.Task task)
         {
             task.IsComplete = true;
-            DbContext.SaveChanges();
+            this.dbContext.SaveChanges();
         }
     }
 }

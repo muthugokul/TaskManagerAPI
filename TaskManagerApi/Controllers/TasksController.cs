@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TaskManagerApi.Data.Interface;
+using TaskManagerApi.Business.Interface;
 
 namespace TaskManagerApi.Controllers
 {
@@ -12,25 +12,58 @@ namespace TaskManagerApi.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-        private readonly ITaskRepository<Model.Task> taskRepository;
+        private readonly IService<Model.Task> taskService;
 
-        public TasksController(ITaskRepository<Model.Task> taskRepository)
+        public TasksController(IService<Model.Task> taskService)
         {
-            this.taskRepository = taskRepository;
+            this.taskService = taskService;
         }
 
         /// <summary>
         /// Retrieves all tasks.
         /// </summary>
-        /// <returns></returns>
-        // GET api/tasks
+        /// <returns>List of tasks</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        [Produces("application/json")]
+        public async Task<IActionResult> GetAll()
         {
-            IEnumerable<Model.Task> tasks = this.taskRepository.GetAll();
-            return Ok(tasks);
+            try
+            {
+                var tasks = await this.taskService.GetAll();
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+
         }
-        
+
+        /// <summary>
+        /// Gets the task for the specified task id.
+        /// </summary>
+        /// <returns>A task.</returns>
+        [HttpGet("{id}")]
+        [Produces("application/json")]
+        public async Task<IActionResult> Get(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var tasks = await this.taskService.Get(id);
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostTodo([FromBody] Model.Task task)
         {
@@ -41,7 +74,7 @@ namespace TaskManagerApi.Controllers
 
             try
             {
-                await this.taskRepository.Create(task);
+                await this.taskService.Create(task);
 
                 return CreatedAtAction("POST ", new { id = task.Id }, task);
             }

@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
+using TaskManagerApi.Business;
+using TaskManagerApi.Business.Interface;
 using TaskManagerApi.Data;
 using TaskManagerApi.Data.Interface;
 
@@ -32,8 +34,10 @@ namespace TaskManagerApi
         {
             services.AddDbContext<TaskManagerDbContext>(opts => opts.UseSqlServer(@"Data Source=LAPTOP-3KV7S2OL;Initial Catalog=TaskManager;Integrated Security=True;Connect Timeout=30;"));
 
-            //services.AddDbContext<TaskManagerDbContext>(opts => opts.UseInMemoryDatabase("TaskManager"));
-            services.AddScoped<ITaskRepository<Model.Task>, TaskRepository>();
+            services.AddScoped<IRepository<Model.Task>, TaskRepository>();
+            services.AddScoped<IRepository<Model.ParentTask>, ParentTaskRepository>();
+            services.AddScoped<IService<Model.Task>, TaskService>();
+            services.AddScoped<IService<Model.ParentTask>, ParentTaskService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
