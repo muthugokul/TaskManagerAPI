@@ -32,7 +32,7 @@ namespace TaskManagerApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TaskManagerDbContext>(opts => opts.UseSqlServer(@"Data Source=LAPTOP-3KV7S2OL;Initial Catalog=TaskManager;Integrated Security=True;Connect Timeout=30;"));
+            services.AddDbContext<TaskManagerDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("TaskManagerDatabase")));
 
             services.AddScoped<IRepository<Model.Task>, TaskRepository>();
             services.AddScoped<IRepository<Model.ParentTask>, ParentTaskRepository>();
