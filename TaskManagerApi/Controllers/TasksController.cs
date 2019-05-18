@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagerApi.Data.Interface;
@@ -38,9 +39,18 @@ namespace TaskManagerApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            await this.taskRepository.Create(task);
+            try
+            {
+                await this.taskRepository.Create(task);
 
-            return CreatedAtAction("POST ", new { id = task.Id }, task);
+                return CreatedAtAction("POST ", new { id = task.Id }, task);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+            
         }
 
         /// <summary>

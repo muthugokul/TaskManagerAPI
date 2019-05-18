@@ -13,6 +13,10 @@ namespace TaskManagerApi.Data
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+        }
+
         public DbSet<Task> Tasks { get; set; }
         public DbSet<ParentTask> ParentTasks { get; set; }
     }
