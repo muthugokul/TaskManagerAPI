@@ -38,7 +38,7 @@ namespace TaskManagerApi.Controllers
             catch (Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
             }
 
         }
