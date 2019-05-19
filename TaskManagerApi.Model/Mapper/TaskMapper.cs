@@ -24,5 +24,24 @@ namespace TaskManagerApi.Model.Mapper
 
             return task;
         }
+
+        public static Model.Task Map(Model.Task entity, UpdateTask updateTask)
+        {
+            entity.Id = updateTask.Id;
+            entity.Name = updateTask.Name;
+            entity.Priority = updateTask.Priority;
+            entity.StartDate = updateTask.StartDate;
+            entity.EndDate = updateTask.EndDate;
+        
+            if (updateTask.ParentTask != null)
+            {
+                entity.ParentTask = ParentTaskMapper.Map(entity.ParentTask, updateTask.ParentTask);
+            } else
+            {
+                entity.ParentTask = null;
+            }
+
+            return entity;
+        }
     }
 }

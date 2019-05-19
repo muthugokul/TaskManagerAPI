@@ -40,7 +40,7 @@ namespace TaskManagerApi.Controllers
             catch (Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
             }
         }
 
@@ -71,14 +71,14 @@ namespace TaskManagerApi.Controllers
             catch (Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
             }
         }
 
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<IActionResult> Create([FromBody] CreateTask task)
+        public async Task<IActionResult> Create([FromBody] CreateTask createTask)
         {
             if (!ModelState.IsValid)
             {
@@ -87,26 +87,33 @@ namespace TaskManagerApi.Controllers
 
             try
             {
-                await this.taskService.Create(TaskMapper.Map(task));
+                var newTask = TaskMapper.Map(createTask);
+                await this.taskService.Create(newTask);
 
-                return Ok();
+                return Ok(newTask.Id);
             }
             catch(Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
             }
         }
 
         /// <summary>
         /// Updates the task.
         /// </summary>
-        /// <param name="task">The task</param>
-        [HttpPut]
+        /// <param name="id">The task id to update</param>
+        /// <param name="updateTask">Task to update</param>
+        [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<IActionResult> Update([FromBody] Model.Task task)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTask updateTask)
         {
+            if (id != updateTask.Id)
+            {
+                return BadRequest();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -114,14 +121,20 @@ namespace TaskManagerApi.Controllers
 
             try
             {
-                await this.taskService.Update(task);
+                var entity = await this.taskService.Get(id);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
 
-                return Ok();
+                await this.taskService.Update(TaskMapper.Map(entity, updateTask));
+
+                return NoContent();
             }
             catch (Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
             }
         }
 
@@ -131,7 +144,7 @@ namespace TaskManagerApi.Controllers
         /// <param name="id"></param>
         [HttpPut("{id}/end")]
         [Produces("application/json")]
-        public async Task<IActionResult> EndTask(int id)
+        public async Task<IActionResult> EndTask([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -140,14 +153,20 @@ namespace TaskManagerApi.Controllers
 
             try
             {
+                var entity = await this.taskService.Get(id);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
                 await this.taskService.EndTask(id);
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
             }
         }
     }

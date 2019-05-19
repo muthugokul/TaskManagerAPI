@@ -15,5 +15,18 @@ namespace TaskManagerApi.Model.Mapper
                 Name = newParentTask.Name
             };
         }
+
+        public static Model.ParentTask Map(Model.ParentTask entity, UpdateParentTask updateParentTask)
+        {
+            if (entity == null)
+            {
+                entity = new Model.ParentTask();
+            }
+
+            entity.Id = updateParentTask.Id;
+            entity.Name = updateParentTask.Name;
+
+            return entity;
+        }
     }
 }
