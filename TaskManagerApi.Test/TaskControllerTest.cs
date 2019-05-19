@@ -71,6 +71,19 @@ namespace TaskManagerApi.Test
         #region Get
 
         [Fact]
+        public async Task Get_Returns_BadRequest_When_ModelStateIsInvalid()
+        {
+            // Arrange
+            controller.ModelState.AddModelError("Id", "Required");
+
+            // Act
+            var result = await controller.Get(1);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
         public async Task Get_Returns_ExpectedTask()
         {
             // Arrange

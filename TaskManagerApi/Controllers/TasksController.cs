@@ -50,7 +50,7 @@ namespace TaskManagerApi.Controllers
         /// <returns>A task.</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
