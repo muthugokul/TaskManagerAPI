@@ -5,6 +5,8 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagerApi.Business.Interface;
+using TaskManagerApi.Model.Contracts;
+using TaskManagerApi.Model.Mapper;
 
 namespace TaskManagerApi.Controllers
 {
@@ -69,7 +71,9 @@ namespace TaskManagerApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Model.Task task)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<IActionResult> Create([FromBody] CreateTask task)
         {
             if (!ModelState.IsValid)
             {
@@ -78,7 +82,7 @@ namespace TaskManagerApi.Controllers
 
             try
             {
-                await this.taskService.Create(task);
+                await this.taskService.Create(TaskMapper.Map(task));
 
                 return Ok();
             }
@@ -93,6 +97,8 @@ namespace TaskManagerApi.Controllers
         /// </summary>
         /// <param name="task">The task</param>
         [HttpPut]
+        [Produces("application/json")]
+        [Consumes("application/json")]
         public async Task<IActionResult> Update([FromBody] Model.Task task)
         {
             if (!ModelState.IsValid)
@@ -117,6 +123,7 @@ namespace TaskManagerApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpPut("{id}/end")]
+        [Produces("application/json")]
         public async Task<IActionResult> EndTask(int id)
         {
             if (!ModelState.IsValid)
