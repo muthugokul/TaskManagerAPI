@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TaskManagerApi.Business.Interface;
 
 namespace TaskManagerApi.Controllers
@@ -13,10 +14,12 @@ namespace TaskManagerApi.Controllers
     public class ParentTasksController : ControllerBase
     {
         private readonly IService<Model.ParentTask> parentTaskService;
+        private readonly ILogger<ParentTasksController> logger;
 
-        public ParentTasksController(IService<Model.ParentTask> parentTaskService)
+        public ParentTasksController(IService<Model.ParentTask> parentTaskService, ILogger<ParentTasksController> logger)
         {
             this.parentTaskService = parentTaskService;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -34,7 +37,8 @@ namespace TaskManagerApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                this.logger.LogError(ex.Message);
+                throw;
             }
 
         }

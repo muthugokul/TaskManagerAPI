@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TaskManagerApi.Business.Interface;
 using TaskManagerApi.Model.Contracts;
 using TaskManagerApi.Model.Mapper;
@@ -15,10 +16,12 @@ namespace TaskManagerApi.Controllers
     public class TasksController : ControllerBase
     {
         private readonly IService<Model.Task> taskService;
+        private readonly ILogger<TasksController> logger;
 
-        public TasksController(IService<Model.Task> taskService)
+        public TasksController(IService<Model.Task> taskService, ILogger<TasksController> logger)
         {
             this.taskService = taskService;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -36,6 +39,7 @@ namespace TaskManagerApi.Controllers
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex.Message);
                 throw;
             }
         }
@@ -66,6 +70,7 @@ namespace TaskManagerApi.Controllers
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex.Message);
                 throw;
             }
         }
@@ -88,6 +93,7 @@ namespace TaskManagerApi.Controllers
             }
             catch(Exception ex)
             {
+                this.logger.LogError(ex.Message);
                 throw;
             }
         }
@@ -114,6 +120,7 @@ namespace TaskManagerApi.Controllers
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex.Message);
                 throw;
             }
         }
@@ -139,6 +146,7 @@ namespace TaskManagerApi.Controllers
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex.Message);
                 throw;
             }
         }
