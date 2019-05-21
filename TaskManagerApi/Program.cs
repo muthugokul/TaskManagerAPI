@@ -26,6 +26,9 @@ namespace TaskManagerApi
                     logging.AddDebug();
                     logging.AddEventSourceLogger();
                 })
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseStartup<Startup>();
     }
 }

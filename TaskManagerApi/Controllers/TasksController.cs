@@ -40,7 +40,7 @@ namespace TaskManagerApi.Controllers
             catch (Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -71,7 +71,7 @@ namespace TaskManagerApi.Controllers
             catch (Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -95,7 +95,7 @@ namespace TaskManagerApi.Controllers
             catch(Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -134,7 +134,7 @@ namespace TaskManagerApi.Controllers
             catch (Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -166,7 +166,7 @@ namespace TaskManagerApi.Controllers
             catch (Exception ex)
             {
                 this.logger.LogError(ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Internal Server error.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }
