@@ -64,6 +64,7 @@ namespace TaskManagerApi.Data
         public async Task<int> EndTask(int id)
         {
             var task = await this.Get(id);
+            task.EndDate = DateTime.Now;
             task.IsComplete = true;
 
             return await this.dbContext.SaveChangesAsync();
