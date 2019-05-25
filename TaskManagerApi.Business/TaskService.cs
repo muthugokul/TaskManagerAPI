@@ -46,13 +46,6 @@ namespace TaskManagerApi.Business
 
         public async Task<int> Update(Model.Task entity)
         {
-            var parentTask = entity.ParentTask;
-            if (parentTask != null && parentTask.Id > 0)
-            {
-                parentTask = await this.parentTaskRepository.Get(entity.ParentTask.Id);
-                entity.ParentTask = parentTask;
-            }
-
             return await this.taskRepository.Update(entity);
         }
     }

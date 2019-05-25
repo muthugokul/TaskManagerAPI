@@ -138,7 +138,7 @@ namespace TaskManagerApi.Controllers
                     return NotFound();
                 }
 
-                await this.taskService.Update(TaskMapper.Map(entity, updateTask));
+                await this.taskService.Update(TaskMapper.Map(new Model.Task(), updateTask));
 
                 return NoContent();
             }
