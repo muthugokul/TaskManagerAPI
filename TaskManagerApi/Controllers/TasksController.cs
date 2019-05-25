@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TaskManagerApi.Business.Interface;
@@ -30,14 +31,14 @@ namespace TaskManagerApi.Controllers
         /// <returns>List of tasks</returns>
         [HttpGet(Name = "task_query")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(Model.Task), 200)]
+        [ProducesResponseType(typeof(IEnumerable<Model.Task>), 200)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetAll()
         {
             try
             {
                 var tasks = await this.taskService.GetAll();
-                return Ok(tasks);
+                return Ok(tasks.ToList());
             }
             catch (Exception ex)
             {

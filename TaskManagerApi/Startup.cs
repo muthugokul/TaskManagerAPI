@@ -39,6 +39,7 @@ namespace TaskManagerApi
             services.AddScoped<IService<Model.Task>, TaskService>();
             services.AddScoped<IService<Model.ParentTask>, ParentTaskService>();
 
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSwaggerGen(c => {
@@ -58,7 +59,6 @@ namespace TaskManagerApi
                 c.PreSerializeFilters.Add((swaggerDoc, httpReq) => {
                     swaggerDoc.Host = "dev.taskmanager.com:501";
                     swaggerDoc.Schemes = new List<string>() { httpReq.Scheme };
-                    swaggerDoc.BasePath = "/api";
                 });
             });
             app.UseSwaggerUI(c => {
@@ -68,6 +68,14 @@ namespace TaskManagerApi
             });
 
             app.UseHttpsRedirection();
+
+            app.UseCors(c =>
+            {
+                c.AllowAnyOrigin();
+                c.AllowAnyHeader();
+                c.AllowAnyMethod();
+                c.AllowCredentials();
+            });
             app.UseMvc();
         }
     }
