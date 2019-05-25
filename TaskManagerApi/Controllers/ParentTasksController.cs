@@ -26,8 +26,11 @@ namespace TaskManagerApi.Controllers
         /// Retrieves all parent tasks.
         /// </summary>
         /// <returns>List of parent tasks</returns>
-        [HttpGet]
+        [HttpGet(Name = "parentTask_query")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(Model.ParentTask), 200)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> GetAll()
         {
             try

@@ -53,8 +53,16 @@ namespace TaskManagerApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                c.PreSerializeFilters.Add((swaggerDoc, httpReq) => {
+                    swaggerDoc.Host = "dev.taskmanager.com:501";
+                    swaggerDoc.Schemes = new List<string>() { httpReq.Scheme };
+                    swaggerDoc.BasePath = "/api";
+                });
+            });
             app.UseSwaggerUI(c => {
+                c.DisplayOperationId();
                 c.SwaggerEndpoint("./swagger/v1/swagger.json", "TaskManager Api");
                 c.RoutePrefix = string.Empty;
             });

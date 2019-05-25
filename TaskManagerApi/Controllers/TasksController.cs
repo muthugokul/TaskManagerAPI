@@ -28,8 +28,10 @@ namespace TaskManagerApi.Controllers
         /// Retrieves all tasks.
         /// </summary>
         /// <returns>List of tasks</returns>
-        [HttpGet]
+        [HttpGet(Name = "task_query")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(Model.Task), 200)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -48,8 +50,11 @@ namespace TaskManagerApi.Controllers
         /// Gets the task for the specified task id.
         /// </summary>
         /// <returns>A task.</returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "task_get")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(Model.Task), 200)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -75,9 +80,11 @@ namespace TaskManagerApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost(Name = "task_post")]
         [Produces("application/json")]
         [Consumes("application/json")]
+        [ProducesResponseType(typeof(Model.Task), 200)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> Create([FromBody] CreateTask createTask)
         {
             if (!ModelState.IsValid)
@@ -104,9 +111,12 @@ namespace TaskManagerApi.Controllers
         /// </summary>
         /// <param name="id">The task id to update</param>
         /// <param name="updateTask">Task to update</param>
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = "task_put")]
         [Produces("application/json")]
         [Consumes("application/json")]
+        [ProducesResponseType(typeof(Model.Task), 200)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTask updateTask)
         {
             if (id != updateTask.Id)
@@ -142,8 +152,11 @@ namespace TaskManagerApi.Controllers
         /// Updates the task for the specified fields.
         /// </summary>
         /// <param name="id"></param>
-        [HttpPut("{id}/end")]
+        [HttpPut("{id}/end", Name = "task_end")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(Model.Task), 200)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> EndTask([FromRoute] int id)
         {
             if (!ModelState.IsValid)
