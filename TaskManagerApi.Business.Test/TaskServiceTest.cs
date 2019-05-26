@@ -96,17 +96,6 @@ namespace TaskManagerApi.Business.Test
             mockParentTaskRepository.Verify(r => r.Update(It.IsAny<Model.ParentTask>()), Times.Never);
         }
 
-        [Fact]
-        public async Task Update_Calls_ParentTaskRepository_Get_Once()
-        {
-            // Arrange && Act
-            var result = await taskService.Update(new Model.Task { Id = 1, ParentTask = new Model.ParentTask { Id = 1 } });
-
-            // Assert
-            mockRepository.Verify(r => r.Update(It.IsAny<Model.Task>()), Times.Once);
-            mockParentTaskRepository.Verify(r => r.Get(It.IsAny<int>()), Times.Once);
-        }
-
         #endregion
 
         #region EndTask

@@ -205,28 +205,6 @@ namespace TaskManagerApi.Data.Test
         }
 
         [Fact]
-        public async Task Update_Inserts_ParentTask()
-        {
-            // Arrange
-            var repository = new TaskRepository(dbContext);
-            var parentTaskRepository = new ParentTaskRepository(dbContext);
-
-            var task = await repository.Get(4);
-            task.ParentTask = new Model.ParentTask { Id = 10, Name = "Parent task 10" };
-
-            // Act
-            var result = await repository.Update(task);
-            var actualTask = await repository.Get(4);
-            var actualParentTasks = await parentTaskRepository.GetAll();
-
-            // Assert
-            Assert.Equal(task.Id, actualTask.Id);
-            Assert.Equal(task.ParentTask.Id, actualTask.ParentTask.Id);
-            Assert.Equal(task.ParentTask.Name, actualTask.ParentTask.Name);
-            Assert.Equal(3, actualParentTasks.Count());
-        }
-
-        [Fact]
         public async Task Update_Saves_ParentTask()
         {
             // Arrange
