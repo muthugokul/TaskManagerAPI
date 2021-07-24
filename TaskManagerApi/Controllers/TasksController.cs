@@ -183,5 +183,19 @@ namespace TaskManagerApi.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        private int ArrayRotation(string number)
+        {
+            var leftArrow = number.Count(x => x == '<');
+            var rightArrow = number.Count(x => x == '>');
+            var downArrow = numbet.Count(x => x == 'v');
+            var upArrow = number.Count(x => x == '^');
+
+            var totalCountArray = new int[4] { leftArrow, rightArrow, downArrow, upArrow };
+            totalCountArray = totalCountArray.OrderBy(x => x).ToArray<int>();
+            var numberOfArrowsRotated = totalCountArray[0] + totalCountArray[1] + totalCountArray[2];
+
+            return numberOfArrowsRotated;
+        }
     }
 }
